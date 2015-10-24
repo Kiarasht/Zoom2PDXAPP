@@ -15,6 +15,7 @@ import com.google.android.gms.maps.model.LatLng;
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback, GoogleMap.OnMapClickListener {
 
     private GoogleMap mMap;
+    private int total = 0;
     CircleOptions circleOptions;
     Circle myCircle;
 
@@ -46,12 +47,16 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         mMap.setOnMapClickListener(this);
         mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(
                 new LatLng(45.5236111, -122.675), 13));
-
     }
 
     @Override
     public void onMapClick(LatLng latLng) {
-        mMap.clear();
+        ++total;
+
+        if (total == 3) {
+            mMap.clear();
+            total = 1;
+        }
         circleOptions = new CircleOptions()
                 .center(latLng)
                 .radius(1000)
