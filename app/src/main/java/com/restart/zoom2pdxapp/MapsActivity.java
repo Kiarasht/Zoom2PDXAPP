@@ -57,13 +57,24 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             mMap.clear();
             total = 1;
         }
-        circleOptions = new CircleOptions()
-                .center(latLng)
-                .radius(1000)
-                .strokeColor(Color.BLUE)
-                .fillColor(0x40ff0000)
-                .strokeWidth(5);
+        if (total == 1) {
+            circleOptions = new CircleOptions()
+                    .center(latLng)
+                    .radius(1000)
+                    .strokeColor(Color.BLUE)
+                    .fillColor(0x40ff0000)
+                    .strokeWidth(5);
 
-        myCircle = mMap.addCircle(circleOptions);
+            myCircle = mMap.addCircle(circleOptions);
+        } else if (total == 2) {
+            circleOptions = new CircleOptions()
+                    .center(latLng)
+                    .radius(1000)
+                    .strokeColor(Color.BLUE)
+                    .fillColor(R.color.red_global_color)
+                    .strokeWidth(5);
+
+            myCircle = mMap.addCircle(circleOptions);
+        }
     }
 }
