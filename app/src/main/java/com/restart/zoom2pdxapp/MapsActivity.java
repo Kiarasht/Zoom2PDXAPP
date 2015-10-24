@@ -27,6 +27,12 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
+        httpget http = new httpget();
+        try {
+            http.run();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
 
