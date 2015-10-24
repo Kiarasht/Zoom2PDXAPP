@@ -15,6 +15,7 @@ import com.google.android.gms.maps.model.LatLng;
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback, GoogleMap.OnMapClickListener {
 
     private GoogleMap mMap;
+    CircleOptions circleOptions;
     Circle myCircle;
 
     @Override
@@ -25,7 +26,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
-        mMap.setOnMapClickListener(this);
     }
 
 
@@ -41,23 +41,24 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
-
+        mMap.setMapType(GoogleMap.MAP_TYPE_SATELLITE);
+        mMap.setMyLocationEnabled(true);
+        mMap.setOnMapClickListener(this);
         mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(
                 new LatLng(45.5236111, -122.675), 13));
+
     }
 
     @Override
     public void onMapClick(LatLng latLng) {
-        
+        mMap.clear();
+        circleOptions = new CircleOptions()
+                .center(latLng)
+                .radius(1000)
+                .strokeColor(Color.BLUE)
+                .fillColor(0x40ff0000)
+                .strokeWidth(5);
+
+        myCircle = mMap.addCircle(circleOptions);
     }
 }
-/*
-
-CircleOptions circleOptions = new CircleOptions()
-        .center(latLng)
-        .radius(1000)
-        .strokeColor(Color.BLUE)
-        .fillColor(0x40ff0000)
-        .strokeWidth(5);
-
-myCircle = mMap.addCircle(circleOptions);*/
