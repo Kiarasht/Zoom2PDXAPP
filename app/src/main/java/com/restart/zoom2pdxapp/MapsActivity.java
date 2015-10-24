@@ -24,7 +24,7 @@ import java.io.InputStream;
 import java.net.URL;
 import java.net.URLConnection;
 
-public class MapsActivity extends FragmentActivity implements OnMapReadyCallback, GoogleMap.OnMapClickListener, GoogleMap.OnMarkerClickListener {
+public class MapsActivity extends FragmentActivity implements OnMapReadyCallback, GoogleMap.OnMapClickListener{
 
     private GoogleMap mMap;
     private int total = 0;
@@ -57,7 +57,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         mMap.setMapType(GoogleMap.MAP_TYPE_SATELLITE);
         mMap.setMyLocationEnabled(true);
         mMap.setOnMapClickListener(this);
-        mMap.setOnMarkerClickListener(this);
         mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(
                 new LatLng(45.5236111, -122.675), 13));
     }
@@ -144,11 +143,14 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                         Log.d("com.restart.zoom2pdxapp", "Longitude:" + result.getString("Longitude"));
 
                         final String school_id = String.valueOf(result.getString("SchoolID"));
+                        final String school_name = String.valueOf(result.getString("SchoolName"));
+                        final String phone_number = String.valueOf(result.getString("PhoneNumber"));
                         final double latParameter = Double.parseDouble(result.getString("Latitude"));
                         final double lngParameter = Double.parseDouble(result.getString("Longitude"));
                         MapsActivity.this.runOnUiThread(new Runnable() {
                             public void run() {
-                                mMap.addMarker(new MarkerOptions().position(new LatLng(latParameter, lngParameter)));
+                                mMap.addMarker(new MarkerOptions().position(new LatLng(latParameter, lngParameter))
+                                        .title(school_name).snippet(phone_number));
                             }
                         });
                     }
@@ -158,14 +160,5 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 }
             }
         });
-    }
-
-    @Override
-    public boolean onMarkerClick(Marker marker) {
-        final LatLng MELBOURNE = new LatLng(45.5236111, -122.675);
-        Marker melbourne = mMap.addMarker(new MarkerOptions()
-                .position(MELBOURNE)
-                .title("Melbourne"));
-        return false;
     }
 }
