@@ -10,10 +10,10 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.Circle;
 import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import org.json.JSONArray;
@@ -24,8 +24,10 @@ import java.io.InputStream;
 import java.net.URL;
 import java.net.URLConnection;
 
-public class MapsActivity extends FragmentActivity implements OnMapReadyCallback, GoogleMap.OnMapClickListener{
+public class MapsActivity extends FragmentActivity implements OnMapReadyCallback, GoogleMap.OnMapClickListener {
 
+    double circlevalue = 0;
+    double circlevalue2 = 0;
     private GoogleMap mMap;
     private int total = 0;
     CircleOptions circleOptions;
@@ -76,7 +78,19 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     .strokeColor(Color.BLUE)
                     .fillColor(0x40ff0000)
                     .strokeWidth(5);
-
+            if (circlevalue >= 3) {
+                mMap.addMarker(new MarkerOptions().position(latLng)
+                        .title(String.valueOf(circlevalue)).snippet("Outstanding").icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
+            } else if (circlevalue >= 2) {
+                mMap.addMarker(new MarkerOptions().position(latLng)
+                        .title(String.valueOf(circlevalue)).snippet("Good").icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
+            } else if (circlevalue >= 1) {
+                mMap.addMarker(new MarkerOptions().position(latLng)
+                        .title(String.valueOf(circlevalue)).snippet("Fair").icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
+            } else if (circlevalue >= 0) {
+                mMap.addMarker(new MarkerOptions().position(latLng)
+                        .title(String.valueOf(circlevalue)).snippet("Bad").icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
+            }
             myCircle = mMap.addCircle(circleOptions);
         } else if (total == 2) {
             circleOptions = new CircleOptions()
@@ -85,7 +99,19 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     .strokeColor(Color.BLUE)
                     .fillColor(R.color.red_global_color)
                     .strokeWidth(5);
-
+            if (circlevalue2 >= 3) {
+                mMap.addMarker(new MarkerOptions().position(latLng)
+                        .title(String.valueOf(circlevalue2)).snippet("Outstanding").icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
+            } else if (circlevalue2 >= 2) {
+                mMap.addMarker(new MarkerOptions().position(latLng)
+                        .title(String.valueOf(circlevalue2)).snippet("Good").icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
+            } else if (circlevalue2 >= 1) {
+                mMap.addMarker(new MarkerOptions().position(latLng)
+                        .title(String.valueOf(circlevalue2)).snippet("Fair").icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
+            } else if (circlevalue2 >= 0) {
+                mMap.addMarker(new MarkerOptions().position(latLng)
+                        .title(String.valueOf(circlevalue2)).snippet("Bad").icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
+            }
             myCircle = mMap.addCircle(circleOptions);
         }
 
@@ -147,6 +173,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                         final String phone_number = String.valueOf(result.getString("PhoneNumber"));
                         final double latParameter = Double.parseDouble(result.getString("Latitude"));
                         final double lngParameter = Double.parseDouble(result.getString("Longitude"));
+                        circlevalue = (Double.parseDouble(result.getString("distance")) * 4);
+                        result = results.getJSONObject(++i);
+                        circlevalue2 = (Double.parseDouble(result.getString("distance")) *4);
+                        result = results.getJSONObject(--i);
                         MapsActivity.this.runOnUiThread(new Runnable() {
                             public void run() {
                                 mMap.addMarker(new MarkerOptions().position(new LatLng(latParameter, lngParameter))
