@@ -4,7 +4,6 @@ import android.graphics.Color;
 import android.os.AsyncTask;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
-import android.util.Log;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -114,7 +113,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             }
             myCircle = mMap.addCircle(circleOptions);
         }
-
         searchSchools(latLng);
     }
 
@@ -126,13 +124,11 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
                 try {
                     URL urlHandle = new URL("http://api.civicapps.org/schools/near/" + latLngParameter.longitude + "," + latLngParameter.latitude);
-
                     URLConnection urlconnectionHandle = urlHandle.openConnection();
-
                     InputStream inputstreamHandle = urlconnectionHandle.getInputStream();
 
                     try {
-                        int intRead = 0;
+                        int intRead;
                         byte[] byteBuffer = new byte[1024];
 
                         do {
@@ -163,20 +159,14 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     for (int i = 0; i < results.length(); i += 1) {
                         JSONObject result = results.getJSONObject(i);
 
-                        Log.d("com.restart.zoom2pdxapp", "---------------------------------");
-                        Log.d("com.restart.zoom2pdxapp", "SchoolName:" + result.getString("SchoolName"));
-                        Log.d("com.restart.zoom2pdxapp", "Latitude:" + result.getString("Latitude"));
-                        Log.d("com.restart.zoom2pdxapp", "Longitude:" + result.getString("Longitude"));
-
-                        final String school_id = String.valueOf(result.getString("SchoolID"));
                         final String school_name = String.valueOf(result.getString("SchoolName"));
                         final String phone_number = String.valueOf(result.getString("PhoneNumber"));
                         final double latParameter = Double.parseDouble(result.getString("Latitude"));
                         final double lngParameter = Double.parseDouble(result.getString("Longitude"));
                         circlevalue = (Double.parseDouble(result.getString("distance")) * 4);
                         result = results.getJSONObject(++i);
-                        circlevalue2 = (Double.parseDouble(result.getString("distance")) *4);
-                        result = results.getJSONObject(--i);
+                        circlevalue2 = (Double.parseDouble(result.getString("distance")) * 4);
+                        --i;
                         MapsActivity.this.runOnUiThread(new Runnable() {
                             public void run() {
                                 mMap.addMarker(new MarkerOptions().position(new LatLng(latParameter, lngParameter))
@@ -184,7 +174,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                             }
                         });
                     }
-
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
